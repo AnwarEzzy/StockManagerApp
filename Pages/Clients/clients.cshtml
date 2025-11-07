@@ -1,0 +1,41 @@
+﻿@page
+@model Stock_Manager.Pages.Clients.ClientsModel
+@{
+}
+<br>
+<h2>Liste des clients</h2>
+<a class='btn btn-primary btn-sm' href='/Clients/Create'> Nouveau client</a>
+
+@if (Model.listClients.Count == 0)
+{
+    <p style="color:red;">Aucun client trouvé dans la base de données.</p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Adresse</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.listClients)
+        {
+            <tr>
+                <td>@item.id</td>
+                <td>@item.nom</td>
+                <td>@item.email</td>
+                <td>@item.telephone</td>
+                <td>@item.adresse</td>
+                <td>
+                    <a class='btn btn-primary btn-sm' href='/Clients/Edit?id=@item.id'>Éditer</a>
+                    <a class='btn btn-danger btn-sm' href='/Clients/Delete?id=@item.id'>Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
