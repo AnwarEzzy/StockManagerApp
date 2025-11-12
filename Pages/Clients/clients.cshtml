@@ -4,14 +4,17 @@
 }
 <br>
 <h2>Liste des clients</h2>
-<a class='btn btn-primary btn-sm' href='/Clients/Create'> Nouveau client</a>
+
+<input type="text" id="searchInput" placeholder="Rechercher par nom..." class="form-control mb-3" style="width:300px;">
+
+<a class='btn btn-primary btn-sm mb-3' href='/Clients/Create'> Nouveau client</a>
 
 @if (Model.listClients.Count == 0)
 {
     <p style="color:red;">Aucun client trouvé dans la base de données.</p>
 }
 
-<table class="table">
+<table class="table" id="clientsTable">
     <thead>
         <tr>
             <th>ID</th>
@@ -39,3 +42,23 @@
         }
     </tbody>
 </table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('clientsTable').getElementsByTagName('tbody')[0];
+        const rows = table.getElementsByTagName('tr');
+
+        searchInput.addEventListener('keyup', function () {
+            const filter = searchInput.value.toLowerCase();
+
+            for (let i = 0; i < rows.length; i++) {
+                const td = rows[i].getElementsByTagName('td')[1];
+                if (td) {
+                    const txtValue = td.textContent || td.innerText;
+                    rows[i].style.display = txtValue.toLowerCase().startsWith(filter) ? '' : 'none';
+                }
+            }
+        });
+    });
+</script>

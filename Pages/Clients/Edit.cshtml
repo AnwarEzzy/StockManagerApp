@@ -1,9 +1,9 @@
 ﻿@page
-@model Stock_Manager.Pages.Clients.CreateModel
+@model Stock_Manager.Pages.Clients.EditModel
 @{
 }
 <br>
-<h2>Créer un nouveau client</h2>
+<h2>Modifier un client</h2>
 
 @if (Model.errorMessage.Length > 0)
 {
@@ -11,6 +11,7 @@
 }
 
 <form method="post">
+    <input type="hidden" name="id" value="@Model.clientInfo.id" />
     <div class="mb-3">
         <label>Nom</label>
         <input type="text" class="form-control" name="nom" value="@Model.clientInfo.nom" />
@@ -28,6 +29,6 @@
         <input type="text" class="form-control" name="adresse" value="@Model.clientInfo.adresse" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <button type="submit" class="btn btn-success">Mettre à jour</button>
     <a href="/Clients/Clients" class="btn btn-secondary">Annuler</a>
 </form>

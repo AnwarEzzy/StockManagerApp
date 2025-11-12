@@ -6,46 +6,51 @@ namespace Stock_Manager.Pages.Clients
 {
     public class CreateModel : PageModel
     {
-        public ClientInfo client = new ClientInfo();
+        public ClientInfo clientInfo = new ClientInfo();
         public string errorMessage = "";
         public string successMessage = "";
 
+        public void OnGet()
+        {
+        }
+
         public void OnPost()
         {
-            client.nom = Request.Form["nom"];
-            client.email = Request.Form["email"];
-            client.telephone = Request.Form["telephone"];
-            client.adresse = Request.Form["adresse"];
+            clientInfo.nom = Request.Form["nom"];
+            clientInfo.email = Request.Form["email"];
+            clientInfo.telephone = Request.Form["telephone"];
+            clientInfo.adresse = Request.Form["adresse"];
+
+            if (clientInfo.nom.Length == 0 || clientInfo.email.Length == 0 ||
+                clientInfo.telephone.Length == 0 || clientInfo.adresse.Length == 0)
+            {
+                errorMessage = "Tous les champs sont obligatoires.";
+                return;
+            }
 
             try
             {
-                string connectionString = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=stock_manager;Integrated Security=True";
-                using (SqlConnection con = new SqlConnection(connectionString))
+                string connectionString = "Data Source=localhost;Initial Catalog=stock_manager;Integrated Security=True";
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    con.Open();
-                    string sql = "INSERT INTO Client (nom, Email, Adresse, Telephone) VALUES (@nom, @email, @adresse, @telephone)";
-                    using (SqlCommand cmd = new SqlCommand(sql, con))
+                    connection.Open();
+                    string sql = "INSERT INTO Client (nom, email, telephone, adresse) VALUES (@nom, @email, @telephone, @adresse)";
+                    using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        cmd.Parameters.AddWithValue("@nom", client.nom);
-                        cmd.Parameters.AddWithValue("@email", client.email);
-                        cmd.Parameters.AddWithValue("@telephone", client.telephone);
-                        cmd.Parameters.AddWithValue("@adresse", client.adresse);
-                        cmd.ExecuteNonQuery();
+                        command.Parameters.AddWithValue("@nom", clientInfo.nom);
+                        command.Parameters.AddWithValue("@email", clientInfo.email);
+                        command.Parameters.AddWithValue("@telephone", clientInfo.telephone);
+                        command.Parameters.AddWithValue("@adresse", clientInfo.adresse);
+                        command.ExecuteNonQuery();
                     }
                 }
-
-                successMessage = "Client ajouté avec succès.";
-                Response.Redirect("/Clients");
+                successMessage = "Client ajouté avec succès !";
+                Response.Redirect("/Clients/Clients");
             }
             catch (Exception ex)
             {
-                errorMessage = ex.Message;
+                errorMessage = "Erreur : " + ex.Message;
             }
-        }
-
-        public class ClientInfo
-        {
-            public string nom, email, telephone, adresse;
         }
     }
 }
